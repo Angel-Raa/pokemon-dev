@@ -1,0 +1,39 @@
+/* PokemonItem.module.css */
+.card {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin: 0 auto 1rem;
+  }
+  
+  .name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d3748;
+    text-transform: capitalize;
+    margin-bottom: 0.5rem;
+  }
+  
+  .id {
+    font-size: 0.875rem;
+    color: #718096;
+    background-color: #f7fafc;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    display: inline-block;
+  }
