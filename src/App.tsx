@@ -1,7 +1,7 @@
-import { MoonLoader } from "react-spinners";
 import styles from "./App.module.css";
 import { usePokemons } from "./hooks";
 import { PokemonItem } from "./components";
+import { Loader } from "./components/shared/Loader";
 
 const App = () => {
   const { isPending, pokemons } = usePokemons();
@@ -9,9 +9,9 @@ const App = () => {
 
   if (isPending) {
     return (
-      <div className={styles.loaderContainer}>
-        <MoonLoader color="#3B82F6" />
-      </div>
+      <>
+        <Loader />
+      </>
     );
   }
 

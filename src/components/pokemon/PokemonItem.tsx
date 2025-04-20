@@ -1,10 +1,11 @@
+import React from "react";
 import styles from "./PokemonItem.module.css";
 interface Props {
   name: string;
   url: string;
   id: number;
 }
-export const PokemonItem = ({ name, url, id }: Props) => {
+export const PokemonItem = ({ name, id }: Props):React.JSX.Element => {
   return (
     <div className={styles.card}>
       <img
