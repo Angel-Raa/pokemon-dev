@@ -1,3 +1,2 @@
 // Pokemons
-
-export { getPokemons } from "./pokemonApi";
+export { getPokemons, getByNamePokemon } from "./pokemonApi";
