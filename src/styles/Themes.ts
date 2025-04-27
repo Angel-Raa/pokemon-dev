@@ -82,3 +82,4 @@ export const Light = {
     color1: "#1cb0f6",
     color2:"#37464F"
   };
+

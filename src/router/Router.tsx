@@ -1,12 +1,14 @@
-import { Route, Routes } from "react-router"
-import App from "../App"
+import { Route, Routes } from "react-router";
+import Home from "../pages/Home";
 
-export const Router = ():React.JSX.Element => {
-    return (
-        <>
-         <Routes>
-            <Route path="/" element={<App/>}/>
-         </Routes>
-        </>
-    )
-}
+const Router = (): React.JSX.Element => {
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </>
+  );
+};
+
+export default Router;

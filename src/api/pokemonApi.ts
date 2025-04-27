@@ -4,16 +4,36 @@ interface Results {
   url: string;
 }
 
-interface FullPokemonApiResponse {
+export interface Pokemon {
   id: number;
   name: string;
-  pokemon: Results[];
+  types: PokemonType[];
+  stats: PokemonStat[];
+  height: number;
+  weight: number;
+  base_experience: number;
+}
+export interface PokemonType {
+  slot: number;
+  type: {
+    name: string;
+    url: string;
+  };
+}
+export interface PokemonStat {
+  base_stat: number;
+  effort: number;
+  stat: {
+    name: string;
+    url: string;
+  };
 }
 
-// This file contains the API calls to fetch Pokemon data from the PokeAPI.
-// It includes functions to get a list of Pokemons and to get a specific Pokemon by its ID.
-// The functions use the Fetch API to make HTTP requests and return the data in a structured format.
-// The getPokemons function fetches a list of Pokemons and maps the results to include the ID extracted from the URL.
+export interface FullPokemonApiResponse
+  extends Omit<Pokemon, "types" | "stats" | "abilities"> {
+  types: string[]; // Solo los nombres de los tipos
+  stats: { name: string; base_stat: number }[];
+}
 
 export const getPokemons = async (): Promise<Results[]> => {
   const response = await fetch("https://pokeapi.co/api/v2/pokemon");
@@ -30,15 +50,40 @@ export const getPokemons = async (): Promise<Results[]> => {
   return pokemons;
 };
 
-export const getByNamePokemon = ({
+export const getByNamePokemon = async ({
   name,
 }: {
   name: string;
 }): Promise<FullPokemonApiResponse> => {
-  return fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-    .then((response) => response.json())
-    .then((data) => {
-      const { id, name, pokemon } = data;
-      return { id, name, pokemon };
-    });
+  if (!name.trim()) {
+    throw new Error("El nombre del Pokémon no puede estar vacío");
+  }
+
+  const response = await fetch(
+    `https://pokeapi.co/api/v2/pokemon/${name.toLowerCase().trim()}`
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.message || `Pokémon no encontrado: ${name}`);
+  }
+
+  const data: Pokemon = await response.json();
+
+  return {
+    id: data.id,
+    name: data.name,
+    height: data.height,
+    weight: data.weight,
+    base_experience: data.base_experience,
+    types: data.types.map(
+      (typeInfo: { type: { name: string } }) => typeInfo.type.name
+    ),
+    stats: data.stats.map(
+      (statInfo: { stat: { name: string }; base_stat: number }) => ({
+        name: statInfo.stat.name,
+        base_stat: statInfo.base_stat,
+      })
+    ),
+  };
 };
