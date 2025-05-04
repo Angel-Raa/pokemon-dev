@@ -1,28 +1,40 @@
-import styles from "./Loader.module.css";
+import styled from "styled-components";
 
-interface LoaderProps {
-  size?: "sm" | "md" | "lg";
-  color?: string;
+interface Props {
+  small?: boolean;
 }
 
-export const Loader = ({ size = "md", color = "#3B82F6" }: LoaderProps) => {
-  const sizeMap = {
-    sm: "1.5rem",
-    md: "2.5rem",
-    lg: "4rem"
-  };
-
+export const Loader = ({ small = false }: Props) => {
   return (
-    <div className={styles.loaderContainer}>
-      <div
-        className={styles.spinner}
-        style={{
-          width: sizeMap[size],
-          height: sizeMap[size],
-          borderColor: `${color} transparent transparent transparent`
-        }}
-      />
-      <p className={styles.text} style={{ color }}>Cargando...</p>
-    </div>
+    <LoaderContainer $small={small}>
+      <Spinner $small={small} />
+      <p>Loading Pokémon...</p>
+    </LoaderContainer>
   );
 };
+
+const LoaderContainer = styled.div<{ $small: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ $small }) => ($small ? "10px" : "20px")};
+  height: ${({ $small }) => ($small ? "auto" : "200px")};
+  padding: ${({ $small }) => ($small ? "10px 0" : "0")};
+`;
+
+const Spinner = styled.div<{ $small: boolean }>`
+  width: ${({ $small }) => ($small ? "30px" : "50px")};
+  height: ${({ $small }) => ($small ? "30px" : "50px")};
+  border: ${({ $small }) => ($small ? "3px" : "5px")} solid
+    ${({ theme }) => theme.color2};
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;

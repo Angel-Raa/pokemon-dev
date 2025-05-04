@@ -35,8 +35,16 @@ export interface FullPokemonApiResponse
   stats: { name: string; base_stat: number }[];
 }
 
-export const getPokemons = async (): Promise<Results[]> => {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon");
+export const getPokemons = async ({
+  offset = 0,
+  limit = 20,
+}: {
+  offset: number;
+  limit: number;
+}): Promise<Results[]> => {
+  const response = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
+  );
   const data = await response.json();
   const pokemons: Results[] = data.results.map(
     (result: Omit<Results, "id">) => ({
@@ -45,9 +53,19 @@ export const getPokemons = async (): Promise<Results[]> => {
     })
   );
 
-  console.log("Pokemons:", pokemons);
+  console.log("Pokemons:", { pokemons });
 
   return pokemons;
+};
+
+export const getPaginatedPokemons = async (offset: number = 0, limit: number = 20) => {
+  const response = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch Pokémon");
+  }
+  return response.json();
 };
 
 export const getByNamePokemon = async ({
