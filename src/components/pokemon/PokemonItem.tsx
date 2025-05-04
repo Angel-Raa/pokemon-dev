@@ -1,32 +1,51 @@
 import React from "react";
-import { getPokemonImage } from "../../utils/pokemonSprites";
 import styled from "styled-components";
 interface Props {
   name: string;
   url: string;
   id: number;
-  imageVariant?: 'official' | 'dreamworld' | 'home' | 'pixel' | 'animated';
-  
+  imageVariant?: "official" | "dreamworld" | "home" | "pixel" | "animated";
 }
-export const PokemonItem = ({ name, id, imageVariant = 'pixel' }: Props):React.JSX.Element => {
-  const imageUrl = getPokemonImage({ id: id.toString(), variant: imageVariant });
+export const PokemonItem = ({ name, id }: Props): React.JSX.Element => {
+  const imageStyle = usePokemonImageStore((state) => state.imageStyle);
+
+  const baseUrl =
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon";
+
+  const getImageUrl = () => {
+    switch (imageStyle) {
+      case "pixel":
+        return `${baseUrl}/${id}.png`;
+      case "dreamworld":
+        return `${baseUrl}/other/dream-world/${id}.svg`;
+      case "official":
+        return `${baseUrl}/other/official-artwork/${id}.png`;
+      case "home":
+        return `${baseUrl}/other/home/${id}.png`;
+      case "animated":
+        return `${baseUrl}/versions/generation-v/black-white/animated/${id}.gif`;
+      default:
+        return `${baseUrl}/other/official-artwork/${id}.png`;
+    }
+  };
   return (
     <Card>
       <ImageContainer>
-        <PokemonImage 
-          src={imageUrl} 
+        <PokemonImage
+          src={getImageUrl()}
           alt={name}
+          $imageStyle={imageStyle}
           onError={(e) => {
-            // Fallback a imagen oficial si la variante falla
-            if (imageVariant !== 'official') {
-              e.currentTarget.src = getPokemonImage({ id: id.toString(), variant: 'official' });
+            // Fallback a imagen oficial si la seleccionada falla
+            if (!e.currentTarget.src.includes("official-artwork")) {
+              e.currentTarget.src = `${baseUrl}/other/official-artwork/${id}.png`;
             }
           }}
         />
       </ImageContainer>
       <PokemonInfo>
         <Name>{name}</Name>
-        <Id>#{id.toString().padStart(3, '0')}</Id>
+        <Id>#{id.toString().padStart(3, "0")}</Id>
       </PokemonInfo>
     </Card>
   );
@@ -56,7 +75,7 @@ const ImageContainer = styled.div`
   height: 140px;
 `;
 
-const PokemonImage = styled.img`
+const PokemonImage = styled.img<{ $imageStyle: string }>`
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -86,6 +105,7 @@ const Id = styled.p`
 `;
 
 import "styled-components";
+import { usePokemonImageStore } from "../../lib/store/pokemonImageStore";
 
 declare module "styled-components" {
   export interface DefaultTheme {

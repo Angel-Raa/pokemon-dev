@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {
   Header,
+  ImageStyleSelector,
   InfiniteScrollObserver,
   Loader,
   PokemonItem,
@@ -28,10 +29,14 @@ const Home = (): React.JSX.Element => {
     <Container>
       <Header onSearchToggle={setSearchMode} />
 
+      {!searchMode && <ImageStyleSelector />}
+      
       {searchMode ? (
+        
         <SearchResultsContainer>
           {/* Search results will be displayed by the Seeker component */}
         </SearchResultsContainer>
+        
       ) : (
         <>
           {isLoading && pokemons.length === 0 ? (
