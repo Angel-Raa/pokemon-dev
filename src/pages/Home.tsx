@@ -9,7 +9,6 @@ import {
 import { useIsFetching } from "@tanstack/react-query";
 import { usePokemons } from "../hooks";
 import { useState } from "react";
-
 const Home = (): React.JSX.Element => {
   const {
     pokemons,

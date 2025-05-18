@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 interface Props {
   onSearchToggle: (isSearching: boolean) => void;
 }
+const APP_NAME = "Pokémon DevDex";
 
 export const Header = ({ onSearchToggle }: Props): React.JSX.Element => {
   const [showSearch, setShowSearch] = useState(false);
@@ -41,10 +42,12 @@ export const Header = ({ onSearchToggle }: Props): React.JSX.Element => {
         </PokemonGifs>
       )}
 
+  
+      <StyledH1>{APP_NAME}</StyledH1>
       <SearchWrapper>
         <SearchToggle onClick={toggleSearch}>
           <Icon
-            icon={showSearch ? "ic:twotone-arrow-back" : "ic:twotone-search"}
+        icon={showSearch ? "ic:twotone-arrow-back" : "ic:twotone-search"}
           />
         </SearchToggle>
         {showSearch && <Seeker />}
@@ -89,3 +92,17 @@ const SearchToggle = styled.button`
   justify-content: center;
   padding: 5px;
 `;
+
+
+const StyledH1 = styled.h1`
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: ${({ theme }) => theme.primary};
+  letter-spacing: 2px;
+  margin: 0;
+`;
+
+Header.defaultProps = {};
+
+export { StyledH1 as h1 };
